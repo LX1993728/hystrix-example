@@ -2,6 +2,7 @@ package com.liuxun.cache.controllers;
 
 import com.alibaba.fastjson.JSON;
 import com.liuxun.cache.http.HttpClientUtils;
+import com.liuxun.cache.hystrix.command.GetCityNameCommand;
 import com.liuxun.cache.hystrix.command.GetProductInfoCommand;
 import com.liuxun.cache.hystrix.command.GetProductInfosCommand;
 import com.liuxun.cache.model.ProductInfo;
@@ -58,6 +59,13 @@ public class CacheController {
 //        final Future<ProductInfo> future = getProductInfoCommand.queue(); // 异步执行
 //        Thread.sleep(1000);
 //        ProductInfo productInfo = future.get();
+
+        //基于信号量
+        final Long cityId = productInfo.getCityId();
+        HystrixCommand<String> getCityNameCommand = new GetCityNameCommand(cityId);
+        final String cityName = getCityNameCommand.execute();
+        productInfo.setCityName(cityName);
+
         System.out.println(JSON.toJSONString(productInfo));
         return "success";
 	}

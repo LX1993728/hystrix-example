@@ -2,6 +2,7 @@ package com.liuxun.cache.hystrix.command;
 
 import com.alibaba.fastjson.JSONObject;
 import com.liuxun.cache.http.HttpClientUtils;
+import com.liuxun.cache.local.cache.LocationCache;
 import com.liuxun.cache.model.ProductInfo;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
@@ -23,6 +24,7 @@ public class GetProductInfoCommand extends HystrixCommand<ProductInfo> {
         String url = "http://127.0.0.1:8082/getProductInfo?productId=" + productId;
         String response = HttpClientUtils.sendGetRequest(url);
 //        System.out.println(response);
-        return JSONObject.parseObject(response,ProductInfo.class);
+        final ProductInfo productInfo = JSONObject.parseObject(response, ProductInfo.class);
+        return productInfo;
     }
 }

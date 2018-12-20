@@ -15,6 +15,24 @@ public class ProductInfo {
     private String size;
     private Long shopId;
     private String modifiedTime;
+    private Long cityId;
+    private String cityName;
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public Long getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
+    }
 
     public ProductInfo() {
     }
