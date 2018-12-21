@@ -2,10 +2,7 @@ package com.liuxun.cache.controllers;
 
 import com.alibaba.fastjson.JSON;
 import com.liuxun.cache.http.HttpClientUtils;
-import com.liuxun.cache.hystrix.command.GetBrandNameCommand;
-import com.liuxun.cache.hystrix.command.GetCityNameCommand;
-import com.liuxun.cache.hystrix.command.GetProductInfoCommand;
-import com.liuxun.cache.hystrix.command.GetProductInfosCommand;
+import com.liuxun.cache.hystrix.command.*;
 import com.liuxun.cache.model.ProductInfo;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixObservableCommand;
@@ -141,6 +138,22 @@ public class CacheController {
         System.out.println(JSON.toJSONString(productInfo));
 
         return "success";
+    }
+
+
+    /**
+     * @apiNote 测试短路器
+     * @param productId
+     * @return
+     */
+    @RequestMapping("/getProductInfo3")
+    @ResponseBody
+    public ProductInfo getProductInfo3(Long productId) {
+        HystrixCommand<ProductInfo> getProductInfo3Command = new GetProductInfo3Command(productId);
+        ProductInfo productInfo = getProductInfo3Command.execute();
+        System.out.println(JSON.toJSONString(productInfo));
+
+        return productInfo;
     }
 
 
