@@ -9,17 +9,20 @@ import com.netflix.hystrix.*;
  * @apiNote 获取商品信息 单条
  */
 
-public class GetProductInfoCommand extends HystrixCommand<ProductInfo> {
+public class GetProductInfo2Command extends HystrixCommand<ProductInfo> {
     private Long productId;
 
-    public GetProductInfoCommand(Long productId){
+    public GetProductInfo2Command(Long productId){
        // super(HystrixCommandGroupKey.Factory.asKey("GetProductInfoGroup"));
-        super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ProductInfoService"))
-                .andCommandKey(HystrixCommandKey.Factory.asKey("GetProductInfoCommand"))
-                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("GetProductInfoPool"))
+        super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ProductInfoService")) // group name
+                .andCommandKey(HystrixCommandKey.Factory.asKey("GetProductInfo2Command"))    // command name
+                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("GetProductInfo2Pool")) // threadpool key
                 .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
                         .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD))
-                .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.defaultSetter().withCoreSize(5))
+                .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.defaultSetter()
+                        .withCoreSize(20)    // 执行的线程数量
+                        .withQueueSizeRejectionThreshold(10) // 请求等待队列的最大数量
+                )
         );
 
         this.productId = productId;
