@@ -2,6 +2,7 @@ package com.liuxun.cache.controllers;
 
 import com.alibaba.fastjson.JSON;
 import com.liuxun.cache.http.HttpClientUtils;
+import com.liuxun.cache.hystrix.command.GetBrandNameCommand;
 import com.liuxun.cache.hystrix.command.GetCityNameCommand;
 import com.liuxun.cache.hystrix.command.GetProductInfoCommand;
 import com.liuxun.cache.hystrix.command.GetProductInfosCommand;
@@ -114,6 +115,31 @@ public class CacheController {
             System.out.println(getProductInfoCommand.isResponseFromCache());
 
         }
+        return "success";
+    }
+
+    /**
+     * @apiNote 测试获取品牌名称的fall-back降级
+     * @param productId
+     * @return
+     */
+    @RequestMapping("/getProductInfo2")
+    @ResponseBody
+    public String getProductInfo2(Long productId) {
+        HystrixCommand<ProductInfo> getProductInfoCommand = new GetProductInfoCommand(productId);
+        ProductInfo productInfo = getProductInfoCommand.execute();
+        final Long cityId = productInfo.getCityId();
+
+        HystrixCommand<String> getCityNameCommand = new GetCityNameCommand(cityId);
+        final String cityName = getCityNameCommand.execute();
+        productInfo.setCityName(cityName);
+
+        GetBrandNameCommand getBrandNameCommand = new GetBrandNameCommand(productInfo.getBrandId());
+        String brandName = getBrandNameCommand.execute();
+        productInfo.setBrandName(brandName);
+
+        System.out.println(JSON.toJSONString(productInfo));
+
         return "success";
     }
 

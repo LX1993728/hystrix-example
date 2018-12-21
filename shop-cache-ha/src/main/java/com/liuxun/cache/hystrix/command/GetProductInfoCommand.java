@@ -48,4 +48,6 @@ public class GetProductInfoCommand extends HystrixCommand<ProductInfo> {
         HystrixRequestCache.getInstance(KEY,
                 HystrixConcurrencyStrategyDefault.getInstance()).clear("product_info_"+productId);
     }
+
+
 }
