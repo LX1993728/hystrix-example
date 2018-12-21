@@ -99,5 +99,23 @@ public class CacheController {
         return "success";
     }
 
+    /**
+     * @apiNote 测试Request cache
+     * @param productIds
+     * @return
+     */
+    @RequestMapping("/getProductInfos2")
+    @ResponseBody
+    public String getProductInfos2(String productIds) {
+        for(String productId : productIds.split(",")){
+            GetProductInfoCommand getProductInfoCommand = new GetProductInfoCommand(Long.valueOf(productId));
+            final ProductInfo productInfo = getProductInfoCommand.execute();
+            System.out.println(JSON.toJSONString(productInfo));
+            System.out.println(getProductInfoCommand.isResponseFromCache());
+
+        }
+        return "success";
+    }
+
 
 }
