@@ -171,5 +171,20 @@ public class CacheController {
         return productInfo;
     }
 
+    /**
+     * @apiNote 测试超时机制
+     * @param productId
+     * @return
+     */
+    @RequestMapping("/getProductInfo5")
+    @ResponseBody
+    public ProductInfo getProductInfo5(Long productId) {
+        HystrixCommand<ProductInfo> getProductInfo5Command = new GetProductInfo5Command(productId);
+        ProductInfo productInfo = getProductInfo5Command.execute();
+        System.out.println(JSON.toJSONString(productInfo));
+
+        return productInfo;
+    }
+
 
 }
